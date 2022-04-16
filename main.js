@@ -51,13 +51,13 @@ function renderSVG() {
 	for(var cmdidx in absolutePath.commands) {
 		var cmd = absolutePath.commands[cmdidx];
 		if(cmd.type != 1) {
-			var pt = document.createElement("circle");
+			var pt = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 			pt.setAttribute("r", 3*scaleFactor);
 			pt.setAttribute("cx", cmd.x);
 			pt.setAttribute("cy", cmd.y);
 			pt.setAttribute("class", "point");
-			pt.addEventListener("click", setStart, false);
 			pt.idx = cmdidx;
+			pt.addEventListener("click", setStart);
 			ptsgrp.appendChild(pt);
 			
 			minx = Math.min(cmd.x, minx);
@@ -74,8 +74,6 @@ function renderSVG() {
 	// Update line thickness
 	document.getElementById("pathPreview").setAttribute("stroke-width", scaleFactor);
 	
-	// For some reason required for the preview to re-render
-	document.getElementById("preview").innerHTML += "";
 }
 
 function setStart(e) {
