@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>SVG Path Start Mover</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="main.css" rel="stylesheet">
+	<script type="module" src="https://cdn.jsdelivr.net/npm/svg-pathdata@6.0.3/lib/SVGPathData.module.js" charset="UTF-8"></script>
+	<script type="module" src="./main.js" charset="UTF-8"></script>
+</head>
+<body>
+	<div id="pageHolder">
+		<div id="inputArea">
+			<textarea id="pathText"></textarea>
+		</div>
+		<svg id="preview">
+			<path id="pathPreview" fill="lightgray" stroke="black"></path>
+			<g id="pointsGroup"></g>
+			<circle id="startPoint" class="point" r="4">
+		</svg>
+	</div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+<svg id="preview" viewBox="-13.931288343558283 -7.431288343558282 -1.0687116564417183 5.431288343558282">
+			<path id="pathPreview" fill="lightgray" stroke="black" d="M -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"></path>
+			<g id="pointsGroup"><circle r="3" cx="-2.5" cy="-1" class="point"></circle><circle r="3" cx="-7.5" cy="4" class="point"></circle><circle r="3" cx="-12.5" cy="-1" class="point"></circle><circle r="3" cx="-7.5" cy="-6" class="point"></circle><circle r="3" cx="-2.5" cy="-1" class="point"></circle></g>
+			<circle id="startPoint" class="point" r="4" cx="-2.5" cy="-1">
+		</circle> </svg>
