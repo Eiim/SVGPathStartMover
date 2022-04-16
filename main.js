@@ -82,7 +82,7 @@ function setStart(e) {
 	var svgText = document.getElementById("pathText").value;
 	var pathData = new SVGPathData(svgText);
 	
-	console.log(JSON.parse(JSON.stringify(pathData.commands)));
+	pathData.normalizeST();
 	
 	// 1. Recalculate m/M
 	var startx = 0;
@@ -104,8 +104,6 @@ function setStart(e) {
 	pathData.commands[0].x = startx;
 	pathData.commands[0].y = starty;
 	
-	console.log(JSON.parse(JSON.stringify(pathData.commands)));
-	
 	// 2. If we end with a z/Z, change to an L
 	// Otherwise, create an L back home or things will break
 	if(pathData.commands[pathData.commands.length-1].type == SVGPathData.CLOSE_PATH) {
@@ -117,8 +115,6 @@ function setStart(e) {
 		pathData.commands.push({type: SVGPathData.LINE_TO, relative: false, x: origx, y: origy});
 	}
 	
-	console.log(JSON.parse(JSON.stringify(pathData.commands)));
-	
 	// 3. Reorder commands: Keep index 0, but move next n to end
 	
 	const mComm = pathData.commands.shift();
@@ -126,8 +122,6 @@ function setStart(e) {
 		pathData.commands.push(pathData.commands.shift());
 	}
 	pathData.commands.unshift(mComm);
-	
-	console.log(JSON.parse(JSON.stringify(pathData.commands)));
 	
 	// Put data back
 	document.getElementById("pathText").value = pathData.sanitize().encode();
