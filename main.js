@@ -47,7 +47,7 @@ function renderSVG() {
 	// Add points
 	for(var cmdidx in absolutePath.commands) {
 		var cmd = absolutePath.commands[cmdidx];
-		if(cmd.type != 1) {
+		if(cmd.type != SVGPathData.CLOSE_PATH) {
 			var pt = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 			pt.setAttribute("r", 3*scaleFactor);
 			pt.setAttribute("cx", cmd.x ?? lastx);
@@ -77,14 +77,61 @@ function renderSVG() {
 }
 
 function setStart(e) {
-	console.log(e.currentTarget.idx);
+	const idx = e.currentTarget.idx;
 	
 	var svgText = document.getElementById("pathText").value;
 	var pathData = new SVGPathData(svgText);
 	
+	console.log(JSON.parse(JSON.stringify(pathData.commands)));
+	
 	// 1. Recalculate m/M
-	// 2. If we end with a z/Z, change to an l/L
+	var startx = 0;
+	var starty = 0;
+	
+	for(var i = 0; i <= idx; i++) {
+		if(pathData.commands[i].relative) {
+			startx += pathData.commands[i].x ?? 0;
+			starty += pathData.commands[i].y ?? 0;
+		} else {
+			startx = pathData.commands[i].x ?? startx;
+			starty = pathData.commands[i].y ?? starty;
+		}
+	}
+	
+	const origx = pathData.commands[0].x;
+	const origy = pathData.commands[0].y;
+	
+	pathData.commands[0].x = startx;
+	pathData.commands[0].y = starty;
+	
+	console.log(JSON.parse(JSON.stringify(pathData.commands)));
+	
+	// 2. If we end with a z/Z, change to an L
+	// Otherwise, create an L back home or things will break
+	if(pathData.commands[pathData.commands.length-1].type == SVGPathData.CLOSE_PATH) {
+		pathData.commands[pathData.commands.length-1].type = SVGPathData.LINE_TO;
+		pathData.commands[pathData.commands.length-1].relative = false;
+		pathData.commands[pathData.commands.length-1].x = origx;
+		pathData.commands[pathData.commands.length-1].y = origy;
+	} else {
+		pathData.commands.push({type: SVGPathData.LINE_TO, relative: false, x: origx, y: origy});
+	}
+	
+	console.log(JSON.parse(JSON.stringify(pathData.commands)));
+	
 	// 3. Reorder commands: Keep index 0, but move next n to end
+	
+	const mComm = pathData.commands.shift();
+	for(var i = 0; i < idx; i++) {
+		pathData.commands.push(pathData.commands.shift());
+	}
+	pathData.commands.unshift(mComm);
+	
+	console.log(JSON.parse(JSON.stringify(pathData.commands)));
+	
+	// Put data back
+	document.getElementById("pathText").value = pathData.sanitize().encode();
+	renderSVG();
 }
 
 document.addEventListener("DOMContentLoaded", e => {
